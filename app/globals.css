@@ -1,26 +1,479 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   NORTHSTAR — Quiet Confidence Design System
+   A refined, warm aesthetic that feels like a trusted confidant
+   ═══════════════════════════════════════════════════════════════════════════ */
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-satoshi);
+  --font-serif: var(--font-instrument);
   --font-mono: var(--font-geist-mono);
+
+  /* Sidebar */
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+
+  /* Chart colors */
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+
+  /* Core semantic */
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+
+  /* Radius scale */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --radius: 0.75rem;
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     Warm Stone Palette — Light Mode
+     Inspired by morning light on paper, quiet spaces for thought
+     ───────────────────────────────────────────────────────────────────────── */
+
+  /* Progress semantic colors - softer, warmer */
+  --progress-0: oklch(0.65 0.16 25);
+  --progress-25: oklch(0.72 0.14 55);
+  --progress-50: oklch(0.78 0.12 85);
+  --progress-75: oklch(0.72 0.15 145);
+  --progress-100: oklch(0.68 0.14 155);
+
+  /* Backgrounds - warm paper tones */
+  --background: oklch(0.985 0.004 80);
+  --foreground: oklch(0.20 0.02 60);
+
+  /* Cards - subtle warmth */
+  --card: oklch(0.995 0.002 80);
+  --card-foreground: oklch(0.20 0.02 60);
+
+  /* Popover */
+  --popover: oklch(0.995 0.002 80);
+  --popover-foreground: oklch(0.20 0.02 60);
+
+  /* Primary - Deep Forest Green (growth, direction, north) */
+  --primary: oklch(0.38 0.08 160);
+  --primary-foreground: oklch(0.98 0.005 80);
+
+  /* Secondary - Warm stone */
+  --secondary: oklch(0.95 0.008 70);
+  --secondary-foreground: oklch(0.30 0.02 60);
+
+  /* Muted - Soft warmth */
+  --muted: oklch(0.94 0.008 75);
+  --muted-foreground: oklch(0.50 0.02 60);
+
+  /* Accent - Gentle highlight */
+  --accent: oklch(0.96 0.015 85);
+  --accent-foreground: oklch(0.25 0.02 60);
+
+  /* Destructive - Soft coral */
+  --destructive: oklch(0.60 0.18 25);
+
+  /* Borders - Barely there */
+  --border: oklch(0.90 0.01 75);
+  --input: oklch(0.92 0.008 75);
+  --ring: oklch(0.38 0.08 160);
+
+  /* Chart colors - Harmonious growth palette */
+  --chart-1: oklch(0.55 0.12 160);
+  --chart-2: oklch(0.65 0.10 180);
+  --chart-3: oklch(0.70 0.08 200);
+  --chart-4: oklch(0.75 0.10 85);
+  --chart-5: oklch(0.60 0.12 45);
+
+  /* Sidebar - Quiet presence */
+  --sidebar: oklch(0.975 0.006 75);
+  --sidebar-foreground: oklch(0.25 0.02 60);
+  --sidebar-primary: oklch(0.38 0.08 160);
+  --sidebar-primary-foreground: oklch(0.98 0.005 80);
+  --sidebar-accent: oklch(0.94 0.012 80);
+  --sidebar-accent-foreground: oklch(0.25 0.02 60);
+  --sidebar-border: oklch(0.92 0.008 75);
+  --sidebar-ring: oklch(0.38 0.08 160);
+
+  /* Period-specific accent colors */
+  --period-vision: oklch(0.55 0.12 300);
+  --period-yearly: oklch(0.50 0.10 250);
+  --period-quarterly: oklch(0.55 0.10 200);
+  --period-monthly: oklch(0.55 0.12 160);
+  --period-weekly: oklch(0.65 0.12 75);
+
+  /* Subtle texture overlay */
+  --grain-opacity: 0.03;
+}
+
+.dark {
+  /* ─────────────────────────────────────────────────────────────────────────
+     Warm Ink Palette — Dark Mode
+     Evening contemplation, focused depth
+     ───────────────────────────────────────────────────────────────────────── */
+
+  --background: oklch(0.14 0.01 60);
+  --foreground: oklch(0.92 0.008 80);
+
+  --card: oklch(0.17 0.012 60);
+  --card-foreground: oklch(0.92 0.008 80);
+
+  --popover: oklch(0.17 0.012 60);
+  --popover-foreground: oklch(0.92 0.008 80);
+
+  --primary: oklch(0.65 0.12 160);
+  --primary-foreground: oklch(0.14 0.01 60);
+
+  --secondary: oklch(0.22 0.015 60);
+  --secondary-foreground: oklch(0.88 0.008 80);
+
+  --muted: oklch(0.22 0.012 60);
+  --muted-foreground: oklch(0.62 0.015 70);
+
+  --accent: oklch(0.24 0.018 65);
+  --accent-foreground: oklch(0.90 0.008 80);
+
+  --destructive: oklch(0.62 0.18 25);
+
+  --border: oklch(0.26 0.012 60);
+  --input: oklch(0.24 0.015 60);
+  --ring: oklch(0.65 0.12 160);
+
+  --chart-1: oklch(0.65 0.12 160);
+  --chart-2: oklch(0.60 0.10 200);
+  --chart-3: oklch(0.70 0.08 85);
+  --chart-4: oklch(0.55 0.12 300);
+  --chart-5: oklch(0.65 0.14 45);
+
+  --sidebar: oklch(0.12 0.008 60);
+  --sidebar-foreground: oklch(0.90 0.008 80);
+  --sidebar-primary: oklch(0.65 0.12 160);
+  --sidebar-primary-foreground: oklch(0.12 0.008 60);
+  --sidebar-accent: oklch(0.20 0.015 65);
+  --sidebar-accent-foreground: oklch(0.90 0.008 80);
+  --sidebar-border: oklch(0.24 0.012 60);
+  --sidebar-ring: oklch(0.65 0.12 160);
+
+  --grain-opacity: 0.04;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "ss01", "ss02", "cv01";
+  }
+
+  /* Refined focus states */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-primary/40 ring-offset-2 ring-offset-background;
+  }
+
+  /* Selection color */
+  ::selection {
+    background: oklch(0.38 0.08 160 / 0.2);
+  }
+
+  .dark ::selection {
+    background: oklch(0.65 0.12 160 / 0.3);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* ─────────────────────────────────────────────────────────────────────────
+     Paper Texture Overlay
+     Adds subtle warmth and tactile quality
+     ───────────────────────────────────────────────────────────────────────── */
+  .paper-texture {
+    position: relative;
+  }
+
+  .paper-texture::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: var(--grain-opacity);
+    mix-blend-mode: multiply;
+    z-index: 0;
+  }
+
+  .dark .paper-texture::before {
+    mix-blend-mode: soft-light;
+  }
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     Gentle Glow Effects
+     ───────────────────────────────────────────────────────────────────────── */
+  .glow-sm {
+    box-shadow: 0 0 15px -3px oklch(0.38 0.08 160 / 0.1);
+  }
+
+  .glow-md {
+    box-shadow: 0 0 30px -5px oklch(0.38 0.08 160 / 0.15);
+  }
+
+  .dark .glow-sm {
+    box-shadow: 0 0 20px -3px oklch(0.65 0.12 160 / 0.15);
+  }
+
+  .dark .glow-md {
+    box-shadow: 0 0 40px -5px oklch(0.65 0.12 160 / 0.2);
+  }
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     Period Badge Colors
+     ───────────────────────────────────────────────────────────────────────── */
+  .badge-vision {
+    background: oklch(0.55 0.12 300 / 0.12);
+    color: oklch(0.45 0.12 300);
+    border-color: oklch(0.55 0.12 300 / 0.25);
+  }
+
+  .badge-yearly {
+    background: oklch(0.50 0.10 250 / 0.12);
+    color: oklch(0.42 0.10 250);
+    border-color: oklch(0.50 0.10 250 / 0.25);
+  }
+
+  .badge-quarterly {
+    background: oklch(0.55 0.10 200 / 0.12);
+    color: oklch(0.45 0.10 200);
+    border-color: oklch(0.55 0.10 200 / 0.25);
+  }
+
+  .badge-monthly {
+    background: oklch(0.55 0.12 160 / 0.12);
+    color: oklch(0.38 0.10 160);
+    border-color: oklch(0.55 0.12 160 / 0.25);
+  }
+
+  .badge-weekly {
+    background: oklch(0.65 0.12 75 / 0.15);
+    color: oklch(0.50 0.10 75);
+    border-color: oklch(0.65 0.12 75 / 0.3);
+  }
+
+  .dark .badge-vision {
+    background: oklch(0.55 0.12 300 / 0.18);
+    color: oklch(0.75 0.12 300);
+    border-color: oklch(0.55 0.12 300 / 0.35);
+  }
+
+  .dark .badge-yearly {
+    background: oklch(0.50 0.10 250 / 0.18);
+    color: oklch(0.72 0.10 250);
+    border-color: oklch(0.50 0.10 250 / 0.35);
+  }
+
+  .dark .badge-quarterly {
+    background: oklch(0.55 0.10 200 / 0.18);
+    color: oklch(0.72 0.10 200);
+    border-color: oklch(0.55 0.10 200 / 0.35);
+  }
+
+  .dark .badge-monthly {
+    background: oklch(0.55 0.12 160 / 0.18);
+    color: oklch(0.70 0.12 160);
+    border-color: oklch(0.55 0.12 160 / 0.35);
+  }
+
+  .dark .badge-weekly {
+    background: oklch(0.65 0.12 75 / 0.2);
+    color: oklch(0.78 0.10 75);
+    border-color: oklch(0.65 0.12 75 / 0.35);
+  }
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     Progress Ring Gradients
+     ───────────────────────────────────────────────────────────────────────── */
+  .progress-track {
+    stroke: oklch(0.92 0.008 75);
+  }
+
+  .dark .progress-track {
+    stroke: oklch(0.24 0.012 60);
+  }
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     Smooth Transitions
+     ───────────────────────────────────────────────────────────────────────── */
+  .transition-smooth {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .transition-bounce {
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     Card Hover States
+     ───────────────────────────────────────────────────────────────────────── */
+  .card-interactive {
+    @apply transition-all duration-300;
+    @apply hover:shadow-lg hover:shadow-primary/5;
+    @apply hover:-translate-y-0.5;
+  }
+
+  .dark .card-interactive {
+    @apply hover:shadow-primary/10;
+  }
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     Typography Utilities
+     ───────────────────────────────────────────────────────────────────────── */
+  .heading-display {
+    font-family: var(--font-instrument);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     Scrollbar Styling
+     ───────────────────────────────────────────────────────────────────────── */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: oklch(0.85 0.01 75) transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: oklch(0.85 0.01 75);
+    border-radius: 3px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: oklch(0.75 0.01 75);
+  }
+
+  .dark .scrollbar-thin {
+    scrollbar-color: oklch(0.30 0.012 60) transparent;
+  }
+
+  .dark .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: oklch(0.30 0.012 60);
+  }
+
+  .dark .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: oklch(0.40 0.012 60);
+  }
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     Gradient Text
+     ───────────────────────────────────────────────────────────────────────── */
+  .gradient-text {
+    background: linear-gradient(135deg, oklch(0.38 0.08 160), oklch(0.45 0.10 180));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .dark .gradient-text {
+    background: linear-gradient(135deg, oklch(0.65 0.12 160), oklch(0.70 0.10 180));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+@layer utilities {
+  /* Animation delays for staggered reveals */
+  .animate-delay-100 { animation-delay: 100ms; }
+  .animate-delay-200 { animation-delay: 200ms; }
+  .animate-delay-300 { animation-delay: 300ms; }
+  .animate-delay-400 { animation-delay: 400ms; }
+  .animate-delay-500 { animation-delay: 500ms; }
+
+  /* Fade in up animation */
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.5s ease-out forwards;
+    opacity: 0;
+  }
+
+  /* Gentle pulse for attention */
+  @keyframes gentle-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+
+  .animate-gentle-pulse {
+    animation: gentle-pulse 2s ease-in-out infinite;
+  }
+
+  /* Subtle float for visual interest */
+  @keyframes subtle-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+
+  .animate-float {
+    animation: subtle-float 4s ease-in-out infinite;
+  }
 }

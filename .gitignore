@@ -1,5 +1,15 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# Personal data - goals, reflections, vision docs
+/data/
+/ExportBlock*/
+
+# Personal config
+CLAUDE.md
+.claude/
+.northstar.log
+.northstar.pid
+
 # dependencies
 /node_modules
 /.pnp
