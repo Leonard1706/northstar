@@ -93,6 +93,17 @@ export async function POST(request: NextRequest) {
       'mcp__northstar__readGoalFile',
     ];
 
+    // Build env for the Agent SDK subprocess.
+    // The SDK spawns a Claude Code process that needs authentication.
+    // It checks (in order): ANTHROPIC_API_KEY env var, then ~/.claude/ OAuth tokens.
+    const agentEnv: Record<string, string | undefined> = {
+      ...process.env,
+    };
+    // Forward API key from .env.local if set
+    if (process.env.ANTHROPIC_API_KEY) {
+      agentEnv.ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
+    }
+
     const agentQuery = query({
       prompt: message,
       options: {
@@ -109,6 +120,7 @@ export async function POST(request: NextRequest) {
         mcpServers: { northstar: northstarMcpServer },
         persistSession: true,
         thinking: { type: 'disabled' },
+        env: agentEnv,
       },
     });
 

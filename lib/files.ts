@@ -14,9 +14,21 @@ export async function ensureDir(dirPath: string): Promise<void> {
   }
 }
 
+// Ensure base data directories exist (called lazily on first use)
+let _dataBootstrapped = false;
+export async function ensureDataDir(): Promise<void> {
+  if (_dataBootstrapped) return;
+  _dataBootstrapped = true;
+  await ensureDir(DATA_DIR);
+  await ensureDir(path.join(DATA_DIR, 'goals'));
+  await ensureDir(path.join(DATA_DIR, 'reflections'));
+  await ensureDir(path.join(DATA_DIR, 'vision'));
+}
+
 // Read a markdown file with frontmatter
 export async function readMarkdownFile<T>(filePath: string): Promise<{ frontmatter: T; content: string } | null> {
   try {
+    await ensureDataDir();
     const fullPath = path.join(DATA_DIR, filePath);
     const fileContent = await fs.readFile(fullPath, 'utf-8');
     const { data, content } = matter(fileContent);
@@ -33,6 +45,7 @@ export async function writeMarkdownFile<T extends Record<string, unknown>>(
   content: string
 ): Promise<boolean> {
   try {
+    await ensureDataDir();
     const fullPath = path.join(DATA_DIR, filePath);
     await ensureDir(path.dirname(fullPath));
 
@@ -47,6 +60,7 @@ export async function writeMarkdownFile<T extends Record<string, unknown>>(
 
 // List all markdown files in a directory (recursive)
 export async function listMarkdownFiles(dirPath: string): Promise<string[]> {
+  await ensureDataDir();
   const files: string[] = [];
 
   async function walk(currentPath: string) {
