@@ -3,6 +3,8 @@ import { Instrument_Serif } from "next/font/google";
 import localFont from "next/font/local";
 import { Geist_Mono } from "next/font/google";
 import { Sidebar } from "@/components/layout/sidebar";
+import { AgentPanelProvider } from "@/lib/agent-context";
+import { AgentPanel } from "@/components/agent/agent-panel";
 import "./globals.css";
 
 // Satoshi - Clean, geometric, modern sans-serif for body text
@@ -56,14 +58,17 @@ export default function RootLayout({
       <body
         className={`${satoshi.variable} ${instrumentSerif.variable} ${geistMono.variable} font-sans antialiased`}
       >
-        <div className="flex min-h-screen">
-          <Sidebar />
-          <main className="flex-1 ml-[72px] lg:ml-[260px] min-h-screen bg-background paper-texture transition-all duration-300">
-            <div className="relative z-10">
-              {children}
-            </div>
-          </main>
-        </div>
+        <AgentPanelProvider>
+          <div className="flex min-h-screen">
+            <Sidebar />
+            <main className="flex-1 ml-[72px] lg:ml-[260px] min-h-screen bg-background paper-texture transition-all duration-300">
+              <div className="relative z-10">
+                {children}
+              </div>
+            </main>
+          </div>
+          <AgentPanel />
+        </AgentPanelProvider>
       </body>
     </html>
   );

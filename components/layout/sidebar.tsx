@@ -7,12 +7,14 @@ import {
   Compass,
   Target,
   Sparkles,
+  MessageCircle,
   ChevronLeft,
   ChevronRight,
   Moon,
   Sun,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useAgentPanel } from '@/lib/agent-context';
 import { useState, useEffect } from 'react';
 
 const navItems = [
@@ -38,6 +40,7 @@ const navItems = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { isOpen: isAgentOpen, toggle: toggleAgent } = useAgentPanel();
   const [collapsed, setCollapsed] = useState(false);
   const [isDark, setIsDark] = useState(false);
 
@@ -209,6 +212,73 @@ export function Sidebar() {
               </Link>
             );
           })}
+
+          {/* Coach button */}
+          <button
+            onClick={toggleAgent}
+            className={cn(
+              'group relative flex items-center rounded-xl transition-all duration-200 w-full',
+              collapsed ? 'h-12 w-12 justify-center' : 'h-12 gap-3 px-3',
+              isAgentOpen
+                ? 'text-primary-foreground'
+                : 'text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50'
+            )}
+          >
+            {isAgentOpen && (
+              <motion.div
+                layoutId="sidebar-active-bg"
+                className={cn(
+                  'absolute inset-0 rounded-xl',
+                  'bg-gradient-to-r from-primary to-primary/90',
+                  'shadow-sm'
+                )}
+                initial={false}
+                transition={{
+                  type: 'spring',
+                  stiffness: 400,
+                  damping: 30,
+                }}
+              />
+            )}
+
+            <div className="relative z-10 flex items-center justify-center">
+              <MessageCircle className={cn(
+                'h-5 w-5 transition-transform duration-200',
+                !isAgentOpen && 'group-hover:scale-110'
+              )} />
+            </div>
+
+            <AnimatePresence mode="wait">
+              {!collapsed && (
+                <motion.div
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  transition={{ duration: 0.15 }}
+                  className="relative z-10 flex flex-col min-w-0"
+                >
+                  <span className="text-sm font-medium">Coach</span>
+                  {!isAgentOpen && (
+                    <span className="text-xs text-muted-foreground truncate">
+                      Goal alignment
+                    </span>
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {collapsed && (
+              <div className={cn(
+                'absolute left-full ml-2 px-3 py-2 rounded-lg',
+                'bg-popover text-popover-foreground shadow-lg border border-border',
+                'opacity-0 invisible group-hover:opacity-100 group-hover:visible',
+                'transition-all duration-200 whitespace-nowrap z-50'
+              )}>
+                <span className="text-sm font-medium">Coach</span>
+                <p className="text-xs text-muted-foreground">Goal alignment</p>
+              </div>
+            )}
+          </button>
         </div>
       </nav>
 
