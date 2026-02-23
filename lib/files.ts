@@ -49,7 +49,11 @@ export async function writeMarkdownFile<T extends Record<string, unknown>>(
     const fullPath = path.join(DATA_DIR, filePath);
     await ensureDir(path.dirname(fullPath));
 
-    const fileContent = matter.stringify(content, frontmatter);
+    // Strip undefined values - gray-matter/js-yaml throws on undefined
+    const cleanFrontmatter = Object.fromEntries(
+      Object.entries(frontmatter).filter(([, v]) => v !== undefined)
+    ) as T;
+    const fileContent = matter.stringify(content, cleanFrontmatter);
     await fs.writeFile(fullPath, fileContent, 'utf-8');
     return true;
   } catch (error) {

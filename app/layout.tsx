@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Instrument_Serif } from "next/font/google";
 import localFont from "next/font/local";
 import { Geist_Mono } from "next/font/google";
 import { Sidebar } from "@/components/layout/sidebar";
@@ -30,13 +29,6 @@ const satoshi = localFont({
   display: "swap",
 });
 
-// Instrument Serif - Elegant display font for headings
-const instrumentSerif = Instrument_Serif({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-instrument",
-  display: "swap",
-});
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -54,14 +46,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scrollbar-thin">
+    <html lang="en" className="dark scrollbar-thin">
       <body
-        className={`${satoshi.variable} ${instrumentSerif.variable} ${geistMono.variable} font-sans antialiased`}
+        className={`${satoshi.variable} ${geistMono.variable} font-sans antialiased`}
       >
         <AgentPanelProvider>
           <div className="flex min-h-screen">
             <Sidebar />
-            <main className="flex-1 ml-[72px] lg:ml-[260px] min-h-screen bg-background paper-texture transition-all duration-300">
+            <main className="flex-1 ml-[72px] lg:ml-[260px] min-h-screen bg-background transition-all duration-300">
               <div className="relative z-10">
                 {children}
               </div>
