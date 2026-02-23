@@ -83,15 +83,28 @@ created: "2025-01-13"
 
 ## Scripts
 
-Helper scripts for running as a background server (useful for making it feel like a native app):
+Helper scripts for running as a background server:
 
 ```bash
-./scripts/launch.sh        # Build (if needed) and start on port 3333
-./scripts/stop.sh           # Stop the background server
-./scripts/start-server.sh   # Start server (used by launcher)
+./scripts/start-server.sh     # Start server on port 3333 (builds if needed)
+./scripts/stop.sh             # Stop the background server
+./scripts/launch.sh           # Start + open browser
+./scripts/install-macos-app.sh # Build a clickable NorthStar.app launcher
 ```
 
-There's also a `NorthStar.applescript` you can export as a macOS app for dock-launching.
+## macOS One-Click App (No Terminal Needed)
+
+After `pnpm install`, generate a launcher app:
+
+```bash
+./scripts/install-macos-app.sh
+```
+
+By default, this installs to `/Applications/NorthStar.app` when writable, otherwise `~/Applications/NorthStar.app`.
+
+- Open `NorthStar.app` to start the server and open the browser automatically.
+- Quit `NorthStar.app` (from Dock or Cmd+Q) to shut the server down.
+- Drag `NorthStar.app` to your Dock/Favorites for one-click launch.
 
 ## Tech Stack
 

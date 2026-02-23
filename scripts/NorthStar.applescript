@@ -1,55 +1,99 @@
 -- NorthStar macOS launcher
--- To use: Open in Script Editor > File > Export as Application
--- Then move the .app to your Applications folder or Dock
+-- Recommended: run ./scripts/install-macos-app.sh to build an app with projectRoot injected.
+-- Manual fallback: set projectRoot below to your repository absolute path.
+
+property projectRoot : "__NORTHSTAR_PROJECT_ROOT__"
+property serverURL : "http://localhost:3333"
+property isLaunching : false
+property isQuitting : false
+
+on resolveProjectRoot()
+	set pathCandidates to {}
+	copy projectRoot to end of pathCandidates
+
+	try
+		set scriptPath to POSIX path of (path to me)
+		set localCandidate1 to do shell script "cd \"$(dirname " & quoted form of scriptPath & ")/..\" 2>/dev/null && pwd || true"
+		set localCandidate2 to do shell script "cd \"$(dirname " & quoted form of scriptPath & ")/../..\" 2>/dev/null && pwd || true"
+		copy localCandidate1 to end of pathCandidates
+		copy localCandidate2 to end of pathCandidates
+	end try
+
+	repeat with candidate in pathCandidates
+		set candidatePath to candidate as text
+		if candidatePath is not "" then
+			try
+				do shell script "test -x " & quoted form of (candidatePath & "/scripts/start-server.sh")
+				return candidatePath
+			end try
+		end if
+	end repeat
+
+	return ""
+end resolveProjectRoot
 
 on run
-	-- Resolve the app directory (parent of scripts/)
-	set scriptDir to POSIX path of (path to me)
-	-- When exported as .app, use a fixed path or adjust this:
-	set appDir to do shell script "cd \"$(dirname " & quoted form of scriptDir & ")/../..\" 2>/dev/null && pwd || echo ''"
-
-	if appDir is "" then
-		display dialog "Could not determine NorthStar directory. Please set appDir manually in the script." buttons {"OK"} default button "OK"
-		return
-	end if
-
-	set pidFile to appDir & "/.northstar.pid"
-	set serverURL to "http://localhost:3333"
-	set startScript to appDir & "/scripts/start-server.sh"
-
-	-- Check if already running
-	set alreadyRunning to false
-	try
-		set pid to do shell script "cat " & quoted form of pidFile
-		do shell script "kill -0 " & pid
-		set alreadyRunning to true
-	end try
-
-	if alreadyRunning then
-		do shell script "open " & serverURL
-		return
-	end if
-
-	-- Start server via shell script (it backgrounds the server and waits for ready)
-	try
-		set result to do shell script "/bin/bash " & quoted form of startScript
-		if result contains "ready" then
-			do shell script "open " & serverURL
-		else
-			display dialog "NorthStar server timed out." buttons {"OK"} default button "OK"
-		end if
-	on error errMsg
-		display dialog "NorthStar failed to start: " & errMsg buttons {"OK"} default button "OK"
-	end try
+	set isQuitting to false
+	my ensureServerAndOpen()
 end run
 
-on quit
-	set scriptDir to POSIX path of (path to me)
-	set appDir to do shell script "cd \"$(dirname " & quoted form of scriptDir & ")/../..\" 2>/dev/null && pwd || echo ''"
-	set pidFile to appDir & "/.northstar.pid"
+on reopen
+	my ensureServerAndOpen()
+end reopen
+
+on activate
+	my ensureServerAndOpen()
+end activate
+
+on ensureServerAndOpen()
+	if isQuitting then
+		return
+	end if
+	
+	if isLaunching then
+		return
+	end if
+	
+	set appDir to resolveProjectRoot()
+	if appDir is "" then
+		display dialog "NorthStar failed to start: unable to resolve project path." buttons {"OK"} default button "OK"
+		return
+	end if
+
+	set startScript to appDir & "/scripts/start-server.sh"
+	set isLaunching to true
 	try
-		set pid to do shell script "cat " & quoted form of pidFile
-		do shell script "kill " & pid & " 2>/dev/null; rm -f " & quoted form of pidFile
+		set launchResult to do shell script "/bin/bash " & quoted form of startScript
+		set isLaunching to false
+		if launchResult contains "ready" then
+			do shell script "open " & serverURL
+		else
+			display dialog "NorthStar failed to start: " & launchResult buttons {"OK"} default button "OK"
+		end if
+	on error errMsg
+		set isLaunching to false
+		display dialog "NorthStar failed to start: " & errMsg buttons {"OK"} default button "OK"
 	end try
+end ensureServerAndOpen
+
+on idle
+	return 15
+end idle
+
+on quit
+	set isQuitting to true
+	
+	if isLaunching then
+		continue quit
+	end if
+
+	set appDir to resolveProjectRoot()
+	if appDir is not "" then
+		set stopScript to appDir & "/scripts/stop.sh"
+		try
+			do shell script "/bin/bash " & quoted form of stopScript
+		end try
+	end if
+
 	continue quit
 end quit
