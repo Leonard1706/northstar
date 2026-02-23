@@ -105,6 +105,8 @@ By default, this installs to `/Applications/NorthStar.app` when writable, otherw
 - Open `NorthStar.app` to start the server and open the browser automatically.
 - Quit `NorthStar.app` (from Dock or Cmd+Q) to shut the server down.
 - Drag `NorthStar.app` to your Dock/Favorites for one-click launch.
+- Optional custom icon: add `public/app-icon.icns` (preferred) or `public/app-icon.png` before running the installer.
+  For best Dock quality, use a square 1024x1024 source image.
 
 ## Tech Stack
 
