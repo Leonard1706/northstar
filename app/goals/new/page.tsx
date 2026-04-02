@@ -3,7 +3,7 @@
 import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { format, getWeek, getMonth, getQuarter, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfQuarter, endOfQuarter, startOfYear, endOfYear, addYears } from 'date-fns';
+import { format, getWeek, getMonth, getQuarter, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfQuarter, endOfQuarter, startOfYear, endOfYear, addYears, addWeeks } from 'date-fns';
 import { Header } from '@/components/layout/header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -207,8 +207,9 @@ function NewGoalPageContent() {
       case 'monthly':
         return { start: startOfMonth(baseDate), end: endOfMonth(baseDate) };
       case 'weekly':
-        // Find the week's start date
-        const weekStart = startOfWeek(new Date(year, month - 1, (week - 1) * 7 + 1), { weekStartsOn: 1 });
+        // Calculate the Monday of the given week number from start of year
+        const yearStartForWeek = startOfWeek(new Date(year, 0, 1), { weekStartsOn: 1 });
+        const weekStart = addWeeks(yearStartForWeek, week - 1);
         return { start: weekStart, end: endOfWeek(weekStart, { weekStartsOn: 1 }) };
       default:
         return { start: new Date(), end: new Date() };

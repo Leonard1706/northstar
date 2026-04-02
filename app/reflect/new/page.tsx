@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { format, getWeek, getMonth, getQuarter } from 'date-fns';
+import { format, getWeek, getMonth, getQuarter, startOfWeek, addWeeks } from 'date-fns';
 import { ReflectionForm } from '@/components/reflections/reflection-form';
 import { Button } from '@/components/ui/button';
 import {
@@ -133,7 +133,7 @@ function NewReflectionPageContent() {
   const findGoal = (type: PeriodType, periodData: { week?: number; month?: number; quarter?: number }): Goal | null => {
     return allGoals.find(g => {
       if (g.frontmatter.period !== type) return false;
-      if (type === 'weekly') return g.frontmatter.week === periodData.week && g.frontmatter.month === periodData.month;
+      if (type === 'weekly') return g.frontmatter.week === periodData.week;
       if (type === 'monthly') return g.frontmatter.month === periodData.month;
       if (type === 'quarterly') return g.frontmatter.quarter === periodData.quarter;
       if (type === 'yearly') return true;
@@ -152,7 +152,9 @@ function NewReflectionPageContent() {
     if (type === 'weekly') {
       // Show last 8 weeks that need reflection
       for (let w = currentWeek; w >= Math.max(1, currentWeek - 7); w--) {
-        const month = Math.ceil(w / 4.33); // Approximate month
+        // Calculate actual month from week number
+        const weekStart = addWeeks(startOfWeek(new Date(year, 0, 1), { weekStartsOn: 1 }), w - 1);
+        const month = getMonth(weekStart) + 1;
         const periodData = { week: w, month };
         const hasRef = hasReflection(type, periodData);
         if (!hasRef) {
