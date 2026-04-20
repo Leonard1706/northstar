@@ -380,7 +380,7 @@ export default function TodayPage() {
               label="Vision"
               value={
                 goals?.vision
-                  ? `${goals.vision.frontmatter.startYear}-${goals.vision.frontmatter.endYear}`
+                  ? `${goals.vision.frontmatter.startYear || new Date().getFullYear()}-${goals.vision.frontmatter.endYear || new Date().getFullYear() + 5}`
                   : 'Define your north star'
               }
               isEmpty={!goals?.vision}
@@ -559,11 +559,11 @@ function QuickLink({
     <Link href={href}>
       <div
         className={cn(
-          'group p-4 rounded-xl border transition-all duration-200',
-          'hover:shadow-sm hover:-translate-y-0.5',
+          'group p-4 rounded-xl border transition-all duration-300',
+          'hover:shadow-lg hover:-translate-y-0.5',
           accent
-            ? 'bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20 hover:border-primary/30'
-            : 'bg-card border-border/50 hover:border-border',
+            ? 'bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20 hover:border-primary/50 hover:shadow-primary/20'
+            : 'bg-card border-border/50 hover:border-border hover:shadow-primary/10',
         )}
       >
         <div className="flex items-start justify-between mb-3">

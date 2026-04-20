@@ -3,7 +3,7 @@ import { query } from '@anthropic-ai/claude-agent-sdk';
 import { northstarMcpServer } from '@/lib/agent-tools';
 import { getWeek, getQuarter, getMonth, getYear } from 'date-fns';
 import path from 'path';
-import { readFileSync } from 'fs';
+import { readFileSync, mkdirSync } from 'fs';
 
 function buildSystemPrompt(context?: { periodType?: string; currentPath?: string; hint?: string }): string {
   const claudeMdPath = path.join(process.cwd(), 'CLAUDE.md');
@@ -43,6 +43,101 @@ File path patterns:
 - Monthly: goals/{year}/q{quarter}/{month_name}/monthly.md
 - Weekly: goals/{year}/q{quarter}/{month_name}/week-{week_number}.md
 
+# Markdown Format Specification
+The frontend parses specific markdown structures. You MUST follow these formats exactly.
+
+## Vision format (period: vision)
+Frontmatter must include: startYear, endYear (e.g. startYear: ${year}, endYear: ${year + 5})
+\`\`\`markdown
+# Vision Title
+
+Introductory text...
+
+## Største målsætninger
+
+- Goal 1
+- Goal 2
+- Goal 3
+
+## 🎯 Focus Area Name
+
+**Mål:** The specific goal for this area
+
+*Årsag: Why this matters*
+
+- Focus point 1
+- Focus point 2
+    - Sub-point (4 spaces indent)
+    - Another sub-point
+- Focus point 3
+
+## 💻 Another Focus Area
+
+**Mål:** Another goal
+
+*Årsag: The reason*
+
+- Focus point
+\`\`\`
+
+## Yearly format (period: yearly)
+Frontmatter can include: emoji (single emoji), theme (text)
+\`\`\`markdown
+## ${year} Største forventninger
+
+- Expectation 1
+- Expectation 2
+- Expectation 3
+
+## 🏆 Focus Area Name
+
+- Focus point 1
+- Focus point 2
+    - Sub-point
+\`\`\`
+
+## Quarterly format (period: quarterly)
+\`\`\`markdown
+## Q${quarter} Største forventninger
+
+- Key expectation 1
+- Key expectation 2
+
+## 🎯 Focus Area
+
+- Focus point 1
+- Focus point 2
+\`\`\`
+
+## Monthly format (period: monthly)
+\`\`\`markdown
+## ${monthNames[month].charAt(0).toUpperCase() + monthNames[month].slice(1)} mål
+
+- [ ] Task 1
+- [ ] Task 2
+- [ ] Task 3
+\`\`\`
+
+## Weekly format (period: weekly)
+\`\`\`markdown
+## Ugens mål
+
+- [ ] Task 1
+- [ ] Task 2
+- [ ] Task 3
+\`\`\`
+
+CRITICAL FORMAT RULES:
+- Focus area headers: \`## [emoji] [name]\` (level 2 heading with emoji at start)
+- Vision goals: \`**Mål:**\` (bold) on its own line under focus area
+- Vision reasons: \`*Årsag:*\` (italic) on its own line
+- Sub-points: exactly 4 spaces of indentation
+- Task checkboxes: \`- [ ]\` (unchecked) or \`- [x]\` (checked), space after bracket required
+- Expectations section: "Største målsætninger" for vision, "[year/quarter] Største forventninger" for yearly/quarterly
+- Monthly/weekly use checkbox tasks only, no focus areas
+- Vision/yearly/quarterly use focus areas with bullet points, no checkboxes
+- All content in Danish
+
 # Instructions
 Du er Leonards personlige coach og mål-guide. Du taler dansk.
 
@@ -52,7 +147,8 @@ Vigtige regler:
 3. Brug KUN writeGoal/writeReflection tools EFTER brugeren har bekræftet.
 4. Hold ugentlige mål realistiske - fokuser på 5-8 opgaver fordelt på de vigtigste kategorier.
 5. Skriv altid mål i "jeg-format" som affirmationer.
-6. Vær direkte, ærlig og ambitiøs men realistisk.`;
+6. Vær direkte, ærlig og ambitiøs men realistisk.
+7. Følg ALTID markdown-formatspecifikationen ovenfor når du skriver filer. Formatet skal matche præcist for at frontend kan parse det korrekt.`;
 
   if (context?.hint) {
     prompt += `\n\n# User Context\n${context.hint}`;
@@ -83,6 +179,7 @@ export async function POST(request: NextRequest) {
 
     const systemPrompt = buildSystemPrompt(context);
     const dataDir = path.join(process.cwd(), 'data');
+    mkdirSync(dataDir, { recursive: true });
 
     const mcpToolNames = [
       'mcp__northstar__getCurrentGoals',

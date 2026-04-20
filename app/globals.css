@@ -64,130 +64,116 @@
   --radius: 0.75rem;
 
   /* ─────────────────────────────────────────────────────────────────────────
-     Warm Stone Palette — Light Mode
-     Inspired by morning light on paper, quiet spaces for thought
+     Sleek Nebula Palette — Light Mode
+     Bright frosted glass, cool space
      ───────────────────────────────────────────────────────────────────────── */
 
-  /* Progress semantic colors - softer, warmer */
-  --progress-0: oklch(0.65 0.16 25);
-  --progress-25: oklch(0.72 0.14 55);
-  --progress-50: oklch(0.78 0.12 85);
-  --progress-75: oklch(0.72 0.15 145);
-  --progress-100: oklch(0.68 0.14 155);
+  --progress-0: oklch(0.60 0.15 260);
+  --progress-25: oklch(0.65 0.16 280);
+  --progress-50: oklch(0.70 0.18 300);
+  --progress-75: oklch(0.65 0.16 320);
+  --progress-100: oklch(0.70 0.12 340);
 
-  /* Backgrounds - warm paper tones */
-  --background: oklch(0.985 0.004 80);
-  --foreground: oklch(0.20 0.02 60);
+  --background: oklch(0.98 0.01 260);
+  --foreground: oklch(0.15 0.03 280);
 
-  /* Cards - subtle warmth */
-  --card: oklch(0.995 0.002 80);
-  --card-foreground: oklch(0.20 0.02 60);
+  --card: oklch(0.99 0.01 260);
+  --card-foreground: oklch(0.15 0.03 280);
 
-  /* Popover */
-  --popover: oklch(0.995 0.002 80);
-  --popover-foreground: oklch(0.20 0.02 60);
+  --popover: oklch(0.99 0.01 260);
+  --popover-foreground: oklch(0.15 0.03 280);
 
-  /* Primary - Deep Forest Green (growth, direction, north) */
-  --primary: oklch(0.38 0.08 160);
-  --primary-foreground: oklch(0.98 0.005 80);
+  --primary: oklch(0.55 0.15 260);
+  --primary-foreground: oklch(0.98 0.01 260);
 
-  /* Secondary - Warm stone */
-  --secondary: oklch(0.95 0.008 70);
-  --secondary-foreground: oklch(0.30 0.02 60);
+  --secondary: oklch(0.95 0.02 260);
+  --secondary-foreground: oklch(0.30 0.05 260);
 
-  /* Muted - Soft warmth */
-  --muted: oklch(0.94 0.008 75);
-  --muted-foreground: oklch(0.50 0.02 60);
+  --muted: oklch(0.95 0.01 260);
+  --muted-foreground: oklch(0.50 0.03 260);
 
-  /* Accent - Gentle highlight */
-  --accent: oklch(0.96 0.015 85);
-  --accent-foreground: oklch(0.25 0.02 60);
+  --accent: oklch(0.96 0.02 280);
+  --accent-foreground: oklch(0.25 0.05 280);
 
-  /* Destructive - Soft coral */
-  --destructive: oklch(0.60 0.18 25);
+  --destructive: oklch(0.60 0.18 20);
 
-  /* Borders - Barely there */
-  --border: oklch(0.90 0.01 75);
-  --input: oklch(0.92 0.008 75);
-  --ring: oklch(0.38 0.08 160);
+  --border: oklch(0.92 0.01 260);
+  --input: oklch(0.94 0.01 260);
+  --ring: oklch(0.55 0.15 260);
 
-  /* Chart colors - Harmonious growth palette */
-  --chart-1: oklch(0.55 0.12 160);
-  --chart-2: oklch(0.65 0.10 180);
-  --chart-3: oklch(0.70 0.08 200);
-  --chart-4: oklch(0.75 0.10 85);
-  --chart-5: oklch(0.60 0.12 45);
+  --chart-1: oklch(0.55 0.15 260);
+  --chart-2: oklch(0.60 0.12 280);
+  --chart-3: oklch(0.65 0.16 300);
+  --chart-4: oklch(0.60 0.14 320);
+  --chart-5: oklch(0.70 0.12 340);
 
-  /* Sidebar - Quiet presence */
-  --sidebar: oklch(0.975 0.006 75);
-  --sidebar-foreground: oklch(0.25 0.02 60);
-  --sidebar-primary: oklch(0.38 0.08 160);
-  --sidebar-primary-foreground: oklch(0.98 0.005 80);
-  --sidebar-accent: oklch(0.94 0.012 80);
-  --sidebar-accent-foreground: oklch(0.25 0.02 60);
-  --sidebar-border: oklch(0.92 0.008 75);
-  --sidebar-ring: oklch(0.38 0.08 160);
+  --sidebar: oklch(0.98 0.01 260);
+  --sidebar-foreground: oklch(0.25 0.03 280);
+  --sidebar-primary: oklch(0.55 0.15 260);
+  --sidebar-primary-foreground: oklch(0.98 0.01 260);
+  --sidebar-accent: oklch(0.94 0.02 260);
+  --sidebar-accent-foreground: oklch(0.25 0.03 280);
+  --sidebar-border: oklch(0.92 0.01 260);
+  --sidebar-ring: oklch(0.55 0.15 260);
 
-  /* Period-specific accent colors */
-  --period-vision: oklch(0.55 0.12 300);
-  --period-yearly: oklch(0.50 0.10 250);
-  --period-quarterly: oklch(0.55 0.10 200);
-  --period-monthly: oklch(0.55 0.12 160);
-  --period-weekly: oklch(0.65 0.12 75);
+  --period-vision: oklch(0.60 0.16 300);
+  --period-yearly: oklch(0.65 0.14 280);
+  --period-quarterly: oklch(0.60 0.15 260);
+  --period-monthly: oklch(0.55 0.12 240);
+  --period-weekly: oklch(0.65 0.14 220);
 
-  /* Subtle texture overlay */
-  --grain-opacity: 0.03;
+  --grain-opacity: 0.02;
 }
 
 .dark {
   /* ─────────────────────────────────────────────────────────────────────────
-     Warm Ink Palette — Dark Mode
-     Evening contemplation, focused depth
+     Sleek Nebula Palette — Dark Mode
+     Deep space, glowing stars, matching the dock icon
      ───────────────────────────────────────────────────────────────────────── */
 
-  --background: oklch(0.14 0.01 60);
-  --foreground: oklch(0.92 0.008 80);
+  --background: oklch(0.12 0.03 270);
+  --foreground: oklch(0.95 0.01 260);
 
-  --card: oklch(0.17 0.012 60);
-  --card-foreground: oklch(0.92 0.008 80);
+  --card: oklch(0.16 0.04 275);
+  --card-foreground: oklch(0.95 0.01 260);
 
-  --popover: oklch(0.17 0.012 60);
-  --popover-foreground: oklch(0.92 0.008 80);
+  --popover: oklch(0.16 0.04 275);
+  --popover-foreground: oklch(0.95 0.01 260);
 
-  --primary: oklch(0.65 0.12 160);
-  --primary-foreground: oklch(0.14 0.01 60);
+  --primary: oklch(0.70 0.15 260);
+  --primary-foreground: oklch(0.12 0.03 270);
 
-  --secondary: oklch(0.22 0.015 60);
-  --secondary-foreground: oklch(0.88 0.008 80);
+  --secondary: oklch(0.22 0.05 275);
+  --secondary-foreground: oklch(0.90 0.02 260);
 
-  --muted: oklch(0.22 0.012 60);
-  --muted-foreground: oklch(0.62 0.015 70);
+  --muted: oklch(0.20 0.04 275);
+  --muted-foreground: oklch(0.70 0.03 260);
 
-  --accent: oklch(0.24 0.018 65);
-  --accent-foreground: oklch(0.90 0.008 80);
+  --accent: oklch(0.24 0.06 280);
+  --accent-foreground: oklch(0.95 0.02 260);
 
-  --destructive: oklch(0.62 0.18 25);
+  --destructive: oklch(0.65 0.20 20);
 
-  --border: oklch(0.26 0.012 60);
-  --input: oklch(0.24 0.015 60);
-  --ring: oklch(0.65 0.12 160);
+  --border: oklch(0.25 0.04 275);
+  --input: oklch(0.22 0.04 275);
+  --ring: oklch(0.70 0.15 260);
 
-  --chart-1: oklch(0.65 0.12 160);
-  --chart-2: oklch(0.60 0.10 200);
-  --chart-3: oklch(0.70 0.08 85);
-  --chart-4: oklch(0.55 0.12 300);
-  --chart-5: oklch(0.65 0.14 45);
+  --chart-1: oklch(0.70 0.15 260);
+  --chart-2: oklch(0.75 0.16 280);
+  --chart-3: oklch(0.65 0.20 300);
+  --chart-4: oklch(0.70 0.15 320);
+  --chart-5: oklch(0.80 0.12 340);
 
-  --sidebar: oklch(0.12 0.008 60);
-  --sidebar-foreground: oklch(0.90 0.008 80);
-  --sidebar-primary: oklch(0.65 0.12 160);
-  --sidebar-primary-foreground: oklch(0.12 0.008 60);
-  --sidebar-accent: oklch(0.20 0.015 65);
-  --sidebar-accent-foreground: oklch(0.90 0.008 80);
-  --sidebar-border: oklch(0.24 0.012 60);
-  --sidebar-ring: oklch(0.65 0.12 160);
+  --sidebar: oklch(0.10 0.02 270);
+  --sidebar-foreground: oklch(0.90 0.02 260);
+  --sidebar-primary: oklch(0.70 0.15 260);
+  --sidebar-primary-foreground: oklch(0.12 0.03 270);
+  --sidebar-accent: oklch(0.20 0.04 275);
+  --sidebar-accent-foreground: oklch(0.95 0.02 260);
+  --sidebar-border: oklch(0.22 0.04 275);
+  --sidebar-ring: oklch(0.70 0.15 260);
 
-  --grain-opacity: 0.04;
+  --grain-opacity: 0.02;
 }
 
 @layer base {
@@ -223,45 +209,47 @@
 
 @layer components {
   /* ─────────────────────────────────────────────────────────────────────────
-     Paper Texture Overlay
-     Adds subtle warmth and tactile quality
+     Sleek Glass Ambient Background
      ───────────────────────────────────────────────────────────────────────── */
-  .paper-texture {
+  .ambient-glow {
     position: relative;
   }
 
-  .paper-texture::before {
+  .ambient-glow::before {
     content: "";
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 800px;
+    height: 400px;
+    background: radial-gradient(ellipse at top, oklch(0.70 0.15 260 / 0.15), transparent 70%);
     pointer-events: none;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-    opacity: var(--grain-opacity);
-    mix-blend-mode: multiply;
     z-index: 0;
   }
 
-  .dark .paper-texture::before {
-    mix-blend-mode: soft-light;
+  .dark .ambient-glow::before {
+    background: radial-gradient(ellipse at top, oklch(0.70 0.15 260 / 0.25), transparent 70%);
   }
 
   /* ─────────────────────────────────────────────────────────────────────────
-     Gentle Glow Effects
+     Gentle Glow Effects (Sleek Cyan/Blue)
      ───────────────────────────────────────────────────────────────────────── */
   .glow-sm {
-    box-shadow: 0 0 15px -3px oklch(0.38 0.08 160 / 0.1);
+    box-shadow: 0 0 15px -3px oklch(0.70 0.15 260 / 0.15);
   }
 
   .glow-md {
-    box-shadow: 0 0 30px -5px oklch(0.38 0.08 160 / 0.15);
+    box-shadow: 0 0 30px -5px oklch(0.70 0.15 260 / 0.25);
   }
 
   .dark .glow-sm {
-    box-shadow: 0 0 20px -3px oklch(0.65 0.12 160 / 0.15);
+    box-shadow: 0 0 20px -3px oklch(0.70 0.15 260 / 0.25);
   }
 
   .dark .glow-md {
-    box-shadow: 0 0 40px -5px oklch(0.65 0.12 160 / 0.2);
+    box-shadow: 0 0 40px -5px oklch(0.70 0.15 260 / 0.35);
   }
 
   /* ─────────────────────────────────────────────────────────────────────────
@@ -366,9 +354,9 @@
      Typography Utilities
      ───────────────────────────────────────────────────────────────────────── */
   .heading-display {
-    font-family: var(--font-instrument);
-    font-weight: 500;
-    letter-spacing: -0.02em;
+    font-family: var(--font-satoshi);
+    font-weight: 700;
+    letter-spacing: -0.03em;
     line-height: 1.1;
   }
 
@@ -418,14 +406,14 @@
      Gradient Text
      ───────────────────────────────────────────────────────────────────────── */
   .gradient-text {
-    background: linear-gradient(135deg, oklch(0.38 0.08 160), oklch(0.45 0.10 180));
+    background: linear-gradient(135deg, oklch(0.60 0.15 260), oklch(0.70 0.18 300));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   .dark .gradient-text {
-    background: linear-gradient(135deg, oklch(0.65 0.12 160), oklch(0.70 0.10 180));
+    background: linear-gradient(135deg, oklch(0.70 0.15 260), oklch(0.80 0.20 300));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
