@@ -28,7 +28,54 @@ import { Breadcrumb } from '@/components/layout/breadcrumb';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
-import type { Goal, Reflection, PeriodType } from '@/types';
+import { useAgentPanel } from '@/lib/agent-context';
+import { WeeklyProgramView } from '@/components/program/weekly-program';
+import { groupTasksByArea, getArea, taskLabel } from '@/lib/areas';
+import type { Goal, Reflection, PeriodType, Task } from '@/types';
+
+const REPLAN_WEEK_PROMPT =
+  'Hjælp mig med at planlægge denne uges program. Læs mine nuværende månedlige mål (de seks livsområder) og min seneste ugerefleksion, og kog dem ned til konkrete, tidssatte delopgaver fordelt på ugens dage. Beskyt de ikke-arbejdsrelaterede områder. Præsentér programmet først, og skriv det først når jeg har godkendt det.';
+
+// A single monthly task row (used in the area-grouped monthly view)
+function MonthlyTaskRow({
+  task,
+  onToggle,
+}: {
+  task: Task;
+  onToggle: (taskId: string, completed: boolean) => void;
+}) {
+  const area = getArea(task.area);
+  return (
+    <div
+      className={cn(
+        'group flex items-start gap-3 p-2.5 -mx-1 rounded-xl',
+        'hover:bg-muted/40 transition-colors',
+        task.completed && 'opacity-70',
+      )}
+    >
+      <Checkbox
+        checked={task.completed}
+        onCheckedChange={(checked) => onToggle(task.id, checked as boolean)}
+        className="mt-0.5"
+      />
+      {area && (
+        <span
+          className="mt-1.5 flex-shrink-0 h-2 w-2 rounded-full"
+          style={{ backgroundColor: area.color }}
+          title={area.name}
+        />
+      )}
+      <span
+        className={cn(
+          'flex-1 text-[15px] leading-relaxed',
+          task.completed && 'line-through text-muted-foreground',
+        )}
+      >
+        {taskLabel(task)}
+      </span>
+    </div>
+  );
+}
 
 // Period visual config
 const periodConfig: Record<PeriodType, { icon: React.ElementType; label: string }> = {
@@ -204,6 +251,7 @@ interface EditableFocusArea {
 export default function GoalDetailPage() {
   const params = useParams();
   const router = useRouter();
+  const { openWithContext } = useAgentPanel();
   const [goal, setGoal] = useState<Goal | null>(null);
   const [linkedReflection, setLinkedReflection] = useState<Reflection | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -319,12 +367,25 @@ export default function GoalDetailPage() {
     return content.trim();
   }, [goal, editTasks, editExpectations, editFocusAreas]);
 
-  // Start editing
+  // Re-plan the weekly program via the coach (keeps the day/time structure intact)
+  const replanWeek = () =>
+    openWithContext({
+      periodType: 'weekly',
+      currentPath: goal?.path,
+      hint: 'Brugeren vil genplanlægge ugens program ud fra de månedlige mål.',
+      initialPrompt: REPLAN_WEEK_PROMPT,
+    });
+
+  // Start editing. Weekly goals are programs — re-planned via the coach, not edited
+  // inline (inline editing would flatten the day structure).
   const handleStartEditing = () => {
-    if (goal) {
-      initializeEditingState(goal);
-      setIsEditing(true);
+    if (!goal) return;
+    if (goal.frontmatter.period === 'weekly') {
+      replanWeek();
+      return;
     }
+    initializeEditingState(goal);
+    setIsEditing(true);
   };
 
   // Cancel editing
@@ -687,6 +748,11 @@ export default function GoalDetailPage() {
                     {isSaving ? 'Saving...' : 'Save'}
                   </Button>
                 </>
+              ) : goal.frontmatter.period === 'weekly' ? (
+                <Button variant="outline" size="sm" onClick={handleStartEditing}>
+                  <CalendarDays className="h-4 w-4 mr-1.5" />
+                  Genplanlæg
+                </Button>
               ) : (
                 <Button variant="outline" size="sm" onClick={handleStartEditing}>
                   <Edit2 className="h-4 w-4 mr-1.5" />
@@ -756,8 +822,8 @@ export default function GoalDetailPage() {
               </section>
             )}
 
-            {/* Tasks Editor (Monthly/Weekly) */}
-            {['monthly', 'weekly'].includes(goal.frontmatter.period) && (
+            {/* Tasks Editor (Monthly) — weekly programs are re-planned via the coach */}
+            {goal.frontmatter.period === 'monthly' && (
               <section className="rounded-2xl border border-border/50 bg-card p-6">
                 <h3 className="font-medium mb-4">Tasks</h3>
                 <div className="space-y-2">
@@ -1206,74 +1272,64 @@ export default function GoalDetailPage() {
               </>
             )}
 
-            {/* Task-based Goals (Monthly/Weekly) */}
-            {isCompleteable && goal.tasks.length > 0 && (
-              <section className="rounded-2xl border border-border/50 bg-card p-6">
+            {/* Weekly program (view) */}
+            {goal.frontmatter.period === 'weekly' && goal.tasks.length > 0 && (
+              <section className="rounded-2xl border border-border/50 bg-card p-5 sm:p-6">
                 <div className="flex items-center gap-2 mb-5">
-                  <Target className="h-4 w-4 text-muted-foreground" />
-                  <h2 className="font-medium">Tasks</h2>
+                  <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                  <h2 className="font-medium">Ugens program</h2>
                 </div>
-
-                {/* Incomplete tasks */}
-                {goal.tasks.filter(t => !t.completed).length > 0 && (
-                  <div className="space-y-1 mb-4">
-                    {goal.tasks.filter(t => !t.completed).map((task) => (
-                      <motion.div
-                        key={task.id}
-                        layout
-                        className={cn(
-                          'flex items-start gap-3 p-3 -mx-2 rounded-xl',
-                          'hover:bg-muted/50 transition-colors group'
-                        )}
-                      >
-                        <Checkbox
-                          checked={task.completed}
-                          onCheckedChange={(checked) =>
-                            handleTaskToggle(task.id, checked as boolean)
-                          }
-                          className="mt-0.5"
-                        />
-                        <span className="flex-1 text-[15px] leading-relaxed">
-                          {task.text}
-                        </span>
-                      </motion.div>
-                    ))}
-                  </div>
-                )}
-
-                {/* Completed tasks */}
-                {goal.tasks.filter(t => t.completed).length > 0 && (
-                  <div className={cn(
-                    goal.tasks.filter(t => !t.completed).length > 0 && 'pt-4 border-t border-border/50'
-                  )}>
-                    <p className="text-xs text-muted-foreground mb-2">Completed</p>
-                    <div className="space-y-1">
-                      {goal.tasks.filter(t => t.completed).map((task) => (
-                        <motion.div
-                          key={task.id}
-                          layout
-                          className={cn(
-                            'flex items-start gap-3 p-3 -mx-2 rounded-xl',
-                            'hover:bg-muted/50 transition-colors'
-                          )}
-                        >
-                          <Checkbox
-                            checked={task.completed}
-                            onCheckedChange={(checked) =>
-                              handleTaskToggle(task.id, checked as boolean)
-                            }
-                            className="mt-0.5"
-                          />
-                          <span className="flex-1 text-[15px] leading-relaxed line-through text-muted-foreground">
-                            {task.text}
-                          </span>
-                        </motion.div>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                <WeeklyProgramView
+                  tasks={goal.tasks}
+                  weekStart={goal.frontmatter.start ? new Date(goal.frontmatter.start) : undefined}
+                  onToggle={(taskId, completed) => handleTaskToggle(taskId, completed)}
+                  hideEmptyDays={false}
+                />
               </section>
             )}
+
+            {/* Monthly goals — grouped by life area */}
+            {goal.frontmatter.period === 'monthly' && goal.tasks.length > 0 && (() => {
+              const groups = groupTasksByArea(goal.tasks);
+              const untagged = goal.tasks.filter((t) => !t.area);
+              return (
+                <section className="space-y-4">
+                  {groups.map(({ area, tasks: areaTasks }) => (
+                    <div key={area.key} className="rounded-2xl border border-border/50 bg-card p-5 sm:p-6">
+                      <div className="flex items-center gap-2 mb-4">
+                        <span className="text-xl">{area.emoji}</span>
+                        <h3 className="font-medium">{area.name}</h3>
+                        <span className="ml-auto text-xs text-muted-foreground tabular-nums">
+                          {areaTasks.filter((t) => t.completed).length}/{areaTasks.length}
+                        </span>
+                      </div>
+                      <div className="space-y-1">
+                        {areaTasks.map((task) => (
+                          <MonthlyTaskRow key={task.id} task={task} onToggle={handleTaskToggle} />
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+
+                  {untagged.length > 0 && (
+                    <div className="rounded-2xl border border-border/50 bg-card p-5 sm:p-6">
+                      <div className="flex items-center gap-2 mb-4">
+                        <Target className="h-4 w-4 text-muted-foreground" />
+                        <h3 className="font-medium">Øvrige</h3>
+                        <span className="ml-auto text-xs text-muted-foreground tabular-nums">
+                          {untagged.filter((t) => t.completed).length}/{untagged.length}
+                        </span>
+                      </div>
+                      <div className="space-y-1">
+                        {untagged.map((task) => (
+                          <MonthlyTaskRow key={task.id} task={task} onToggle={handleTaskToggle} />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </section>
+              );
+            })()}
           </motion.div>
         )}
       </div>

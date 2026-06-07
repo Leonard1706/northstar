@@ -1,5 +1,6 @@
 import { readMarkdownFile, writeMarkdownFile, listMarkdownFiles, fileExists } from './files';
 import { periodToPath, getCurrentPeriod } from './periods';
+import { parseTaskMeta } from './areas';
 import type { Goal, GoalFrontmatter, Task, GoalTreeNode, PeriodType, PeriodInfo } from '@/types';
 
 // Parse tasks from markdown content
@@ -19,11 +20,16 @@ export function parseTasks(content: string): Task[] {
     // Parse checkbox tasks
     const taskMatch = line.match(/^[-*]\s*\[([ xX])\]\s*(.+)$/);
     if (taskMatch) {
+      const raw = taskMatch[2].trim();
+      const meta = parseTaskMeta(raw);
       tasks.push({
         id: `task-${taskId++}`,
-        text: taskMatch[2].trim(),
+        text: raw, // keep raw for round-trip-safe editing/saving
         completed: taskMatch[1].toLowerCase() === 'x',
         section: currentSection || undefined,
+        time: meta.time,
+        area: meta.areaKey,
+        label: meta.label,
       });
     }
   }

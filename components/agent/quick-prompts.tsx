@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { Target, BookOpen, TrendingUp, Sparkles } from 'lucide-react';
+import { CalendarDays, Target, BookOpen, TrendingUp } from 'lucide-react';
 
 interface QuickPromptsProps {
   onSelect: (prompt: string) => void;
@@ -16,24 +16,28 @@ function getGreeting(): string {
 
 const prompts = [
   {
-    icon: Target,
-    label: 'Sæt ugemål',
-    prompt: 'Hjælp mig med at sætte mål for denne uge. Kig på mine nuværende månedlige mål og foreslå ugentlige mål der bringer mig tættere på dem.',
+    icon: CalendarDays,
+    label: 'Planlæg ugen',
+    prompt:
+      'Hjælp mig med at planlægge ugens program. Læs mine nuværende månedlige mål (de seks livsområder) og min seneste ugerefleksion, og kog dem ned til konkrete, tidssatte delopgaver fordelt på ugens dage (fx "Gym 07:00" mandag/onsdag/fredag). Beskyt de ikke-arbejdsrelaterede områder. Præsentér programmet først, og skriv det først når jeg har godkendt det.',
   },
   {
-    icon: TrendingUp,
-    label: 'Status check',
-    prompt: 'Giv mig et overblik over mine nuværende mål og fremskridt. Hvor står jeg?',
+    icon: Target,
+    label: 'Planlæg måneden',
+    prompt:
+      'Hjælp mig med at sætte månedens mål. Tag udgangspunkt i kvartalsmålene og fordel konkrete opgaver på tværs af mine seks livsområder, så ingen områder bliver glemt. Markér hver opgave med dens #område-tag. Præsentér først, og skriv det først når jeg har godkendt det.',
   },
   {
     icon: BookOpen,
-    label: 'Ugerefleksion',
-    prompt: 'Hjælp mig med at reflektere over denne uge. Hvad gik godt og hvad kan forbedres?',
+    label: 'Ugentlig check-in',
+    prompt:
+      'Hjælp mig med ugens check-in. Gennemgå hvilke opgaver i ugens program jeg har krydset af, og hjælp mig kort med at reflektere over to ting: hvorfor det gik som det gik, og hvad jeg har lært.',
   },
   {
-    icon: Sparkles,
-    label: 'Næste skridt',
-    prompt: 'Hvad bør jeg fokusere på lige nu baseret på mine mål og fremskridt?',
+    icon: TrendingUp,
+    label: 'Status',
+    prompt:
+      'Giv mig et hurtigt overblik: hvor står jeg på månedens mål og ugens program — og er der et livsområde (fx relationer, oplevelser, fitness eller læring) jeg har forsømt på det seneste?',
   },
 ];
 

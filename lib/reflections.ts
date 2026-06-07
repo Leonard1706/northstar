@@ -656,7 +656,8 @@ export async function getRecentReflections(limit: number = 5): Promise<Reflectio
   return allReflections.slice(0, limit);
 }
 
-// Generate reflection file path (nested structure)
+// Generate reflection file path (flat per-year structure — matches the app UI and
+// the 2026+ data layout: reflections/{year}/week-NN-reflection.md, etc.)
 export function getReflectionPath(period: PeriodInfo): string {
   const year = period.year;
   const quarter = period.quarter || Math.ceil((period.month || 1) / 3);
@@ -666,11 +667,11 @@ export function getReflectionPath(period: PeriodInfo): string {
     case 'yearly':
       return `reflections/${year}/yearly-reflection.md`;
     case 'quarterly':
-      return `reflections/${year}/q${quarter}/quarterly-reflection.md`;
+      return `reflections/${year}/q${quarter}-reflection.md`;
     case 'monthly':
-      return `reflections/${year}/q${quarter}/${monthName}/monthly-reflection.md`;
+      return `reflections/${year}/${monthName}-reflection.md`;
     case 'weekly':
-      return `reflections/${year}/q${quarter}/${monthName}/week-${String(period.week).padStart(2, '0')}-reflection.md`;
+      return `reflections/${year}/week-${String(period.week).padStart(2, '0')}-reflection.md`;
     default:
       return `reflections/${year}/reflection.md`;
   }

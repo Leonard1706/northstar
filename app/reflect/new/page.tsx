@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { getReflectionQuestions, buildContentFromSections } from '@/lib/reflection-utils';
+import { taskLabel } from '@/lib/areas';
 import type { Goal, PeriodType, Reflection } from '@/types';
 
 // Step in the reflection creation flow
@@ -595,7 +596,12 @@ function NewReflectionPageContent() {
                             <div className="h-4 w-4 rounded-full border-2 border-muted-foreground/40 flex-shrink-0 mt-0.5" />
                           )}
                           <span className={task.completed ? 'line-through' : ''}>
-                            {task.text}
+                            {task.time && (
+                              <span className="font-mono text-xs text-muted-foreground mr-1.5">
+                                {task.time}
+                              </span>
+                            )}
+                            {taskLabel(task)}
                           </span>
                         </div>
                       ))}

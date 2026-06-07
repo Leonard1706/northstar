@@ -15,8 +15,24 @@ export interface ReflectionQuestion {
   placeholder: string;
 }
 
-// Weekly/Monthly: 4 questions
-const WEEKLY_MONTHLY_QUESTIONS: ReflectionQuestion[] = [
+// Weekly: 2 questions — a fast (~10 min) check-in. You tick the program's tasks
+// off as you go; the review is just accountability + learning, and feeds next week.
+const WEEKLY_QUESTIONS: ReflectionQuestion[] = [
+  {
+    id: 'goals',
+    question: 'Har jeg nået mine mål?',
+    placeholder:
+      'Du har allerede krydset ugens opgaver af i programmet — forklar kort hvorfor det gik som det gik (din "reason for progress")...',
+  },
+  {
+    id: 'learned',
+    question: 'Hvad har jeg lært?',
+    placeholder: 'Den vigtigste indsigt eller læring fra ugen...',
+  },
+];
+
+// Monthly: 4 questions — the deeper, less frequent reflection.
+const MONTHLY_QUESTIONS: ReflectionQuestion[] = [
   {
     id: 'goals',
     question: 'Har jeg nået mine mål?',
@@ -182,14 +198,15 @@ const YEARLY_AFFIRMATION_QUESTIONS: ReflectionQuestion[] = [
 export function getReflectionQuestions(periodType: PeriodType = 'weekly'): ReflectionQuestion[] {
   switch (periodType) {
     case 'weekly':
+      return WEEKLY_QUESTIONS;
     case 'monthly':
-      return WEEKLY_MONTHLY_QUESTIONS;
+      return MONTHLY_QUESTIONS;
     case 'quarterly':
       return QUARTERLY_QUESTIONS;
     case 'yearly':
       return [...YEARLY_REFLECTION_QUESTIONS, ...YEARLY_GROWTH_QUESTIONS, ...YEARLY_AFFIRMATION_QUESTIONS];
     default:
-      return WEEKLY_MONTHLY_QUESTIONS;
+      return WEEKLY_QUESTIONS;
   }
 }
 
@@ -214,18 +231,32 @@ export function buildContentFromSections(
 ): string {
   switch (periodType) {
     case 'weekly':
+      return buildWeeklyContent(sections);
     case 'monthly':
-      return buildWeeklyMonthlyContent(sections);
+      return buildMonthlyContent(sections);
     case 'quarterly':
       return buildQuarterlyContent(sections, quarter || 1);
     case 'yearly':
       return buildYearlyContent(sections, year || new Date().getFullYear());
     default:
-      return buildWeeklyMonthlyContent(sections);
+      return buildWeeklyContent(sections);
   }
 }
 
-function buildWeeklyMonthlyContent(sections: Record<string, string>): string {
+function buildWeeklyContent(sections: Record<string, string>): string {
+  const get = (key: string) => sections[key] || sections[key + '?'] || '';
+
+  return `## Har jeg nået mine mål?
+
+${get('Har jeg nået mine mål')}
+
+## Hvad har jeg lært?
+
+${get('Hvad har jeg lært')}
+`;
+}
+
+function buildMonthlyContent(sections: Record<string, string>): string {
   const get = (key: string) => sections[key] || sections[key + '?'] || '';
 
   return `## Har jeg nået mine mål?

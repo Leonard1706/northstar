@@ -81,12 +81,25 @@ export interface Goal {
   children?: Goal[];
 }
 
+// Life-area keys (the six sub-categories used across the goal system)
+export type AreaKey =
+  | 'mindset'
+  | 'arbejde'
+  | 'relationer'
+  | 'læring'
+  | 'fitness'
+  | 'oplevelser';
+
 // Individual task within a goal (for monthly/weekly)
 export interface Task {
   id: string;
-  text: string;
+  text: string; // raw markdown text, kept verbatim for round-trip safety
   completed: boolean;
-  section?: string;
+  section?: string; // weekly: weekday (e.g. "Mandag") · monthly: area heading
+  // Enriched metadata parsed from the raw text (see lib/areas.ts)
+  time?: string; // "07:00" — when this sub-task is scheduled (weekly program)
+  area?: AreaKey; // life-area parsed from a #tag
+  label?: string; // clean display text (time + #tag stripped); falls back to text
 }
 
 // Parsed reflection document

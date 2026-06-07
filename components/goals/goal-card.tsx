@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ProgressRing } from '@/components/ui/progress-ring';
 import { cn } from '@/lib/utils';
+import { taskLabel } from '@/lib/areas';
 import type { Goal, PeriodType } from '@/types';
 
 interface GoalCardProps {
@@ -87,7 +88,7 @@ export function GoalCard({
                   <Circle className="h-3.5 w-3.5 text-muted-foreground/50 flex-shrink-0" />
                 )}
                 <span className={cn('line-clamp-1', task.completed && 'text-muted-foreground line-through')}>
-                  {task.text}
+                  {taskLabel(task)}
                 </span>
               </div>
             ))}
